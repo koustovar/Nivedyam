@@ -12,10 +12,9 @@ const LiveOrders = () => {
     useEffect(() => {
         const q = query(collection(db, "orders"), orderBy("timestamp", "desc"));
         const unsubscribe = onSnapshot(q, (snapshot) => {
-            const ordersData = snapshot.docs.map(doc => ({
-                id: doc.id,
-                ...doc.data()
-            }));
+            const ordersData = snapshot.docs
+                .map(doc => ({ id: doc.id, ...doc.data() }))
+                .filter(order => order.status !== "billed" && order.status !== "cancelled");
             setOrders(ordersData);
             setLoading(false);
         });
@@ -84,8 +83,8 @@ const LiveOrders = () => {
                                                     </span>
                                                 )}
                                                 <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase ${order.status === 'pending' ? 'bg-orange-500/10 text-orange-500' :
-                                                        order.status === 'preparing' ? 'bg-blue-500/10 text-blue-500' :
-                                                            'bg-green-500/10 text-green-500'
+                                                    order.status === 'preparing' ? 'bg-blue-500/10 text-blue-500' :
+                                                        'bg-green-500/10 text-green-500'
                                                     }`}>
                                                     {order.status}
                                                 </span>

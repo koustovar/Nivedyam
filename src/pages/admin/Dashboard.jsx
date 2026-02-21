@@ -7,7 +7,8 @@ import {
     Settings as SettingsIcon,
     LogOut,
     Menu as MenuIcon,
-    X
+    X,
+    Receipt
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "../../context/AuthContext";
@@ -20,6 +21,7 @@ import LiveOrders from "./LiveOrders";
 import MenuManager from "./MenuManager";
 import Bookings from "./Bookings";
 import Settings from "./Settings";
+import Billing from "./Billing";
 
 const AdminDashboard = () => {
     const [activeTab, setActiveTab] = useState("Dashboard");
@@ -30,6 +32,7 @@ const AdminDashboard = () => {
     const tabs = [
         { name: "Dashboard", icon: LayoutDashboard, component: DashboardOverview },
         { name: "Live Orders", icon: ShoppingBag, component: LiveOrders },
+        { name: "Billing", icon: Receipt, component: Billing },
         { name: "Menu Manager", icon: Utensils, component: MenuManager },
         { name: "Bookings", icon: Calendar, component: Bookings },
         { name: "Settings", icon: SettingsIcon, component: Settings },
@@ -74,8 +77,8 @@ const AdminDashboard = () => {
                                 setIsSidebarOpen(false);
                             }}
                             className={`w-full flex items-center space-x-4 px-5 py-4 rounded-2xl text-sm transition-all duration-300 group ${activeTab === item.name
-                                    ? "bg-gradient-to-r from-saffron to-saffron/80 text-black font-black shadow-xl shadow-saffron/10"
-                                    : "text-white/40 hover:bg-white/5 hover:text-white"
+                                ? "bg-gradient-to-r from-saffron to-saffron/80 text-black font-black shadow-xl shadow-saffron/10"
+                                : "text-white/40 hover:bg-white/5 hover:text-white"
                                 }`}
                         >
                             <item.icon size={20} className={activeTab === item.name ? "text-black" : "text-white/20 group-hover:text-gold transition-colors"} />

@@ -10,6 +10,7 @@ import Tracking from "./pages/customer/Tracking";
 import Booking from "./pages/customer/Booking";
 import Login from "./pages/auth/Login";
 import Header from "./components/layout/Header";
+import Bills from "./pages/customer/Bills";
 
 const AdminDashboard = lazy(() => import("./pages/admin/Dashboard"));
 
@@ -29,6 +30,7 @@ function App() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/tracking" element={<Tracking />} />
           <Route path="/booking" element={<Booking />} />
+          <Route path="/bills" element={<Bills />} />
           <Route path="/events" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/admin/login" element={<Login />} />

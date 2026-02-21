@@ -1,12 +1,59 @@
+import { useState } from "react";
 import { motion } from "framer-motion";
-import { Trash2, Plus, Minus, ChevronRight, MapPin, CreditCard, ShoppingBag } from "lucide-react";
+import { useNavigate, Link } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
+import { orderService } from "../../services/orderService";
 import { useCart } from "../../context/CartContext";
 import Button from "../../components/ui/Button";
 import { Card } from "../../components/ui/Card";
-import { Link } from "react-router-dom";
+import { ArrowRight, Trash2, Plus, Minus, ChevronRight, MapPin, CreditCard, ShoppingBag } from "lucide-react";
 
 const CartPage = () => {
-    const { cart, addToCart, removeFromCart, subtotal, gst, total } = useCart();
+    const { cart, addToCart, removeFromCart, clearCart, subtotal, gst, total, tableId } = useCart();
+    const { currentUser } = useAuth();
+    const navigate = useNavigate();
+    const [isPlacing, setIsPlacing] = useState(false);
+
+    const handlePlaceOrder = async () => {
+        if (!currentUser && !tableId) {
+            alert("Please sign in or scan a table QR code to place an order.");
+            navigate("/login");
+            return;
+        }
+
+        setIsPlacing(true);
+        try {
+            const orderData = {
+                userId: currentUser?.uid || null,
+                items: cart.map(item => ({
+                    menuId: item.id,
+                    name: item.name,
+                    price: item.price,
+                    quantity: item.quantity,
+                    notes: item.notes || ""
+                })),
+                subtotal,
+                gst,
+                totalAmount: total + 30, // Including service charge
+                tableId: tableId || "12", // Default for demo if not set
+                customerDetails: {
+                    name: currentUser?.displayName || "Guest Guest",
+                    email: currentUser?.email || "",
+                    phone: ""
+                },
+                status: "pending"
+            };
+
+            const order = await orderService.createOrder(orderData);
+            clearCart();
+            navigate("/tracking");
+        } catch (error) {
+            console.error("Order failed:", error);
+            alert("Failed to place order. Please try again.");
+        } finally {
+            setIsPlacing(false);
+        }
+    };
 
     if (cart.length === 0) {
         return (
@@ -121,10 +168,12 @@ const CartPage = () => {
             <div className="fixed bottom-28 left-0 right-0 px-8 z-40">
                 <motion.button
                     whileTap={{ scale: 0.95 }}
-                    className="w-full h-16 rounded-[2rem] bg-gradient-to-r from-saffron to-[#ff9100] text-white text-xl font-black shadow-[0_15px_40px_rgba(255,122,0,0.4)] flex items-center justify-center group"
+                    onClick={handlePlaceOrder}
+                    disabled={isPlacing}
+                    className="w-full h-16 rounded-[2rem] bg-gradient-to-r from-saffron to-[#ff9100] text-white text-xl font-black shadow-[0_15px_40px_rgba(255,122,0,0.4)] flex items-center justify-center group disabled:opacity-50"
                 >
-                    Place Order
-                    <ArrowRight className="ml-3 group-hover:translate-x-2 transition-transform" />
+                    {isPlacing ? "Processing..." : "Place Order"}
+                    {!isPlacing && <ArrowRight className="ml-3 group-hover:translate-x-2 transition-transform" />}
                 </motion.button>
             </div>
         </div>

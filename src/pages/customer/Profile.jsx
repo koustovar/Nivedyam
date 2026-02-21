@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { User, Bell, Clock, HelpCircle, LogOut, ChevronRight, Phone, ShieldCheck, MapPin, LogIn, LayoutDashboard } from "lucide-react";
+import { User, Bell, Clock, HelpCircle, LogOut, ChevronRight, Phone, ShieldCheck, MapPin, LogIn, LayoutDashboard, Receipt } from "lucide-react";
 import { useAuth } from "../../context/AuthContext";
 import { useNavigate, Link } from "react-router-dom";
 import Button from "../../components/ui/Button";
@@ -12,8 +12,9 @@ const ProfilePage = () => {
     const menuItems = [
         { icon: MapPin, label: "My Addresses", sub: "Nagpur, Civil Lines", path: "/addresses", color: "text-blue-400" },
         { icon: Clock, label: "Order History", sub: "View past orders", path: "/history", color: "text-gold" },
+        { icon: Receipt, label: "My Bills", sub: "Pay for your feasts", path: "/bills", color: "text-saffron font-bold" },
         { icon: Phone, label: "Call Waiter", sub: "Table 12 - Active", action: () => alert("Waiter notified!"), color: "text-green-400" },
-        ...((isAdmin) ? [{ icon: LayoutDashboard, label: "Admin Management", sub: "Access Control Panel", path: "/admin/dashboard", color: "text-saffron font-bold" }] : []),
+        ...((isAdmin) ? [{ icon: LayoutDashboard, label: "Admin Management", sub: "Access Control Panel", path: "/admin/dashboard", color: "text-emerald-500 font-bold" }] : []),
         { icon: ShieldCheck, label: "Privacy & Security", sub: "Manage account", path: "/security", color: "text-white/40" },
         { icon: HelpCircle, label: "Support & FAQ", sub: "Get help", path: "/support", color: "text-white/40" },
     ];
